@@ -7,17 +7,6 @@ type Tarefa = {
   completa: boolean
 }
 
-const getTasks = () =>
-  fetch("/tasks")
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
-  
-      return res.json()
-    })
-    .then((data) => data as Tarefa[])
-
 function App() {
   return (
     <>
@@ -34,7 +23,7 @@ function Loading({ children }: { children: React.ReactNode }) {
 }
 
 function Tarefas() {
-  const { data: tarefas, error} = useSWR('/tasks', getTasks, { suspense: true })
+  const { data: tarefas, error} = useSWR<Tarefa[]>('/tasks')
 
   return (
     <>
