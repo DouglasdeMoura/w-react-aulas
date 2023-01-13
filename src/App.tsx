@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 type Tarefa = {
   id: number
@@ -6,8 +6,31 @@ type Tarefa = {
   completa: boolean
 }
 
+const getTasks = (callback?: (tarefa: Tarefa[]) => void) =>
+  fetch("/tasks")
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+  
+      return res.json()
+    })
+    .then((tarefas) => {
+      callback?.(tarefas)
+    })
+
 function App() {
   const [tarefas, setTarefas] = useState<Tarefa[]>([])
+
+  useEffect(() => {
+    let ignore = false;
+
+    getTasks(setTarefas)
+
+      return () => {
+        ignore = true;
+      };
+  }, [])
 
   return (
     <>
