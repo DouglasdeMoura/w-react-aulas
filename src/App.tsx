@@ -1,5 +1,5 @@
 import { Button, Stack, Textarea, Title } from '@mantine/core'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import useSWR from 'swr'
 import { z } from 'zod'
 import { useForm, zodResolver } from '@mantine/form'
@@ -46,6 +46,8 @@ const schema = z.object({
 })
 
 function AdicionarTarefa() {
+  const [isLoading, setIsLoading] = useState(false)
+
   const form = useForm({
     initialValues: {
       texto: '',
@@ -55,11 +57,32 @@ function AdicionarTarefa() {
 
   return (
     <form onSubmit={form.onSubmit(({ texto }) => {
-      console.log(texto)
+      setIsLoading(true)
+      fetch('/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ texto }),
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(res.statusText)
+          }
+
+          return res.json()
+        })
+        .then((tarefa) => {
+          console.log(tarefa)
+          form.reset()
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
     })}>
       <Stack>
         <Textarea placeholder="Insira a nova tarefa" {...form.getInputProps('texto')} />
-        <Button type="submit">Adicionar</Button>
+        <Button type="submit" loading={isLoading}>Adicionar</Button>
       </Stack>
     </form>
   )
