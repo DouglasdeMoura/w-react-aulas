@@ -1,7 +1,8 @@
 import { Button, Stack, Textarea, Title } from '@mantine/core'
-import { Suspense, useState } from 'react'
+import { Suspense } from 'react'
 import useSWR from 'swr'
 import { z } from 'zod'
+import { useForm, zodResolver } from '@mantine/form'
 
 type Tarefa = {
   id: number
@@ -45,14 +46,19 @@ const schema = z.object({
 })
 
 function AdicionarTarefa() {
-  return (
-    <form onSubmit={(e) => {
-      e.preventDefault()
+  const form = useForm({
+    initialValues: {
+      texto: '',
+    },
+    validate: zodResolver(schema),
+  })
 
-      const formData = schema.parse(Object.fromEntries(new FormData(e.currentTarget)))  
-    }}>
+  return (
+    <form onSubmit={form.onSubmit(({ texto }) => {
+      console.log(texto)
+    })}>
       <Stack>
-        <Textarea name="texto" id="texto" />
+        <Textarea placeholder="Insira a nova tarefa" {...form.getInputProps('texto')} />
         <Button type="submit">Adicionar</Button>
       </Stack>
     </form>
