@@ -1,5 +1,5 @@
 import { Button, Stack, Textarea, Title } from '@mantine/core'
-import { Suspense, useState } from 'react'
+import { Suspense } from 'react'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 import { z } from 'zod'
