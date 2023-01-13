@@ -1,4 +1,4 @@
-import { useState } from "react"
+import useSWR from 'swr'
 
 type Tarefa = {
   id: number
@@ -15,19 +15,18 @@ const getTasks = () =>
   
       return res.json()
     })
+    .then((data) => data as Tarefa[])
 
 function App() {
-  const [tarefas, setTarefas] = useState<Tarefa[]>(() => {
-    getTasks().then((tasks) => setTarefas(tasks))
-    return []
-  })
+  const { data: tarefas, error, isLoading } = useSWR('/tasks', getTasks)
 
   return (
     <>
       <h1>Tarefas</h1>
-      
+      {isLoading && <p>Carregando...</p>}
+      {error && <p>Erro ao carregar tarefas</p>}
       <ul>
-        {tarefas.map((tarefa) => (
+        {tarefas?.map((tarefa) => (
           <li key={tarefa.id}>{tarefa.texto}</li>
         ))}
       </ul>
