@@ -1,6 +1,7 @@
 import { Button, Stack, Textarea, Title } from '@mantine/core'
 import { Suspense, useState } from 'react'
 import useSWR from 'swr'
+import useSWRMutation from 'swr/mutation'
 import { z } from 'zod'
 import { useForm, zodResolver } from '@mantine/form'
 
@@ -46,7 +47,15 @@ const schema = z.object({
 })
 
 function AdicionarTarefa() {
-  const [isLoading, setIsLoading] = useState(false)
+  const { trigger, isMutating } = useSWRMutation('/tasks', async (url, { arg }) => {
+    await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${arg}`
+      },
+      body: JSON.stringify(arg),
+    })
+  })
 
   const form = useForm({
     initialValues: {
@@ -56,33 +65,14 @@ function AdicionarTarefa() {
   })
 
   return (
-    <form onSubmit={form.onSubmit(({ texto }) => {
-      setIsLoading(true)
-      fetch('/tasks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ texto }),
+    <form onSubmit={form.onSubmit((data) => {
+      trigger(data).then(() => {
+        form.reset()
       })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(res.statusText)
-          }
-
-          return res.json()
-        })
-        .then((tarefa) => {
-          console.log(tarefa)
-          form.reset()
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
     })}>
       <Stack>
         <Textarea placeholder="Insira a nova tarefa" {...form.getInputProps('texto')} />
-        <Button type="submit" loading={isLoading}>Adicionar</Button>
+        <Button type="submit" loading={isMutating}>Adicionar</Button>
       </Stack>
     </form>
   )
