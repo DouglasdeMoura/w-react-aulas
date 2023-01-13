@@ -38,24 +38,23 @@ function Tarefas() {
   )
 }
 
-type FormElements = {
-  texto: HTMLTextAreaElement
-} & HTMLFormControlsCollection
-
-type AdicionarTarefaForm = {
-  readonly elements: FormElements
-} & HTMLFormElement
-
 function AdicionarTarefa() {
+  const [error, setError] = useState<string | undefined>()
+
   return (
-    <form onSubmit={(e: React.SyntheticEvent<AdicionarTarefaForm>) => {
+    <form onSubmit={(e) => {
       e.preventDefault()
       const formData = new FormData(e.currentTarget)
-    
-      console.log('tipagem do formulário:', e.currentTarget.elements.texto.value)
-      console.log('com formData:', formData.get('texto'))
+      const texto = formData.get('texto')
+
+      if (!texto) {
+        setError('Texto é obrigatório')
+      }
     }}>
-      <textarea name="texto" id="texto" /><br />
+      <div>
+        <textarea name="texto" id="texto" />
+        {error ? <p>{error}</p> : null}
+      </div>
       <button type="submit">Adicionar</button>
     </form>
   )
