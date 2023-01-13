@@ -1,5 +1,6 @@
 import { Suspense, useState } from 'react'
 import useSWR from 'swr'
+import { z } from 'zod'
 
 type Tarefa = {
   id: number
@@ -38,16 +39,20 @@ function Tarefas() {
   )
 }
 
+const schema = z.object({
+  texto: z.string().min(2, { message: 'Texto é obrigatório' }),
+})
+
 function AdicionarTarefa() {
   const [error, setError] = useState<string | undefined>()
 
   return (
     <form onSubmit={(e) => {
       e.preventDefault()
-      const formData = new FormData(e.currentTarget)
-      const texto = formData.get('texto')
 
-      if (!texto) {
+      const formData = schema.safeParse(Object.fromEntries(new FormData(e.currentTarget)))  
+      
+      if (!formData.success) {
         setError('Texto é obrigatório')
       }
     }}>
