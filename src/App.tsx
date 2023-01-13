@@ -1,3 +1,4 @@
+import { Button, Stack, Textarea, Title } from '@mantine/core'
 import { Suspense, useState } from 'react'
 import useSWR from 'swr'
 import { z } from 'zod'
@@ -11,7 +12,7 @@ type Tarefa = {
 function App() {
   return (
     <>
-      <h1>Tarefas</h1>
+      <Title>Tarefas</Title>
       <AdicionarTarefa />
       <Suspense fallback={<Loading>Carregando tarefas</Loading>}>
         <Tarefas />
@@ -44,23 +45,16 @@ const schema = z.object({
 })
 
 function AdicionarTarefa() {
-  const [error, setError] = useState<string | undefined>()
-
   return (
     <form onSubmit={(e) => {
       e.preventDefault()
 
-      const formData = schema.safeParse(Object.fromEntries(new FormData(e.currentTarget)))  
-      
-      if (!formData.success) {
-        setError('Texto é obrigatório')
-      }
+      const formData = schema.parse(Object.fromEntries(new FormData(e.currentTarget)))  
     }}>
-      <div>
-        <textarea name="texto" id="texto" />
-        {error ? <p>{error}</p> : null}
-      </div>
-      <button type="submit">Adicionar</button>
+      <Stack>
+        <Textarea name="texto" id="texto" />
+        <Button type="submit">Adicionar</Button>
+      </Stack>
     </form>
   )
 }

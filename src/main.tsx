@@ -1,3 +1,4 @@
+import { Container, MantineProvider } from '@mantine/core'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { SWRConfig } from 'swr'
@@ -10,17 +11,21 @@ if (process.env.NODE_ENV === 'development') {
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <SWRConfig value={{
-      suspense: true,
-      fetcher: (url: string, init?: RequestInit) => fetch(url, init).then((res) => {
-        if (!res.ok) {
-          throw new Error(res.statusText)
-        }
+    <MantineProvider withGlobalStyles withNormalizeCSS>
+      <SWRConfig value={{
+        suspense: true,
+        fetcher: (url: string, init?: RequestInit) => fetch(url, init).then((res) => {
+          if (!res.ok) {
+            throw new Error(res.statusText)
+          }
     
-        return res.json()
-      }),
-    }}>
-      <App />
-    </SWRConfig>
+          return res.json()
+        }),
+      }}>
+        <Container>
+          <App />
+        </Container>
+      </SWRConfig>
+    </MantineProvider>
   </React.StrictMode>,
 )
