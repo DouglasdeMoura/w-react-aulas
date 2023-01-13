@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import useSWR from 'swr'
 
 type Tarefa = {
@@ -11,6 +11,7 @@ function App() {
   return (
     <>
       <h1>Tarefas</h1>
+      <AdicionarTarefa />
       <Suspense fallback={<Loading>Carregando tarefas</Loading>}>
         <Tarefas />
       </Suspense>
@@ -34,6 +35,29 @@ function Tarefas() {
         ))}
       </ul>
     </>
+  )
+}
+
+type FormElements = {
+  texto: HTMLTextAreaElement
+} & HTMLFormControlsCollection
+
+type AdicionarTarefaForm = {
+  readonly elements: FormElements
+} & HTMLFormElement
+
+function AdicionarTarefa() {
+  return (
+    <form onSubmit={(e: React.SyntheticEvent<AdicionarTarefaForm>) => {
+      e.preventDefault()
+      const formData = new FormData(e.currentTarget)
+    
+      console.log('tipagem do formulário:', e.currentTarget.elements.texto.value)
+      console.log('com formData:', formData.get('texto'))
+    }}>
+      <textarea name="texto" id="texto" /><br />
+      <button type="submit">Adicionar</button>
+    </form>
   )
 }
 
