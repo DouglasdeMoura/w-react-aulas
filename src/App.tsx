@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import useSWR from 'swr'
 
 type Tarefa = {
@@ -18,12 +19,25 @@ const getTasks = () =>
     .then((data) => data as Tarefa[])
 
 function App() {
-  const { data: tarefas, error, isLoading } = useSWR('/tasks', getTasks)
-
   return (
     <>
       <h1>Tarefas</h1>
-      {isLoading && <p>Carregando...</p>}
+      <Suspense fallback={<Loading>Carregando tarefas</Loading>}>
+        <Tarefas />
+      </Suspense>
+    </>
+  )
+}
+
+function Loading({ children }: { children: React.ReactNode }) {
+  return <p>{children}</p>
+}
+
+function Tarefas() {
+  const { data: tarefas, error} = useSWR('/tasks', getTasks, { suspense: true })
+
+  return (
+    <>
       {error && <p>Erro ao carregar tarefas</p>}
       <ul>
         {tarefas?.map((tarefa) => (
