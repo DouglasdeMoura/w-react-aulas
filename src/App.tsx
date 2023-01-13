@@ -50,9 +50,6 @@ function AdicionarTarefa() {
   const { trigger, isMutating } = useSWRMutation('/tasks', async (url, { arg }) => {
     await fetch(url, {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${arg}`
-      },
       body: JSON.stringify(arg),
     })
   })
