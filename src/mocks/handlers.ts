@@ -20,14 +20,17 @@ const tasks = [
 
 export const handlers = [
   rest.get("/tasks", (_req, res, ctx) => res(ctx.status(200), ctx.json(tasks))),
-  rest.post("/tasks", (req, res, ctx) =>
-    res(
-      ctx.status(201),
-      ctx.json({
-        id: tasks.length + 1,
-        texto: req.params.texto,
-        completa: false,
-      })
-    )
-  ),
+  rest.post("/tasks", async (req, res, ctx) => {
+    const body = await req.json();
+
+    const novaTarefa = {
+      id: tasks.length + 1,
+      texto: body?.texto,
+      completa: false,
+    };
+
+    tasks.push(novaTarefa);
+
+    return res(ctx.status(201), ctx.json(novaTarefa));
+  }),
 ];
