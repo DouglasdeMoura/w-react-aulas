@@ -4,6 +4,8 @@ import useSWRImmutable from 'swr/immutable'
 import useSWRMutation from 'swr/mutation'
 import { z } from 'zod'
 import { useForm, zodResolver } from '@mantine/form'
+import { useDeleteTask } from './hooks/use-delete-task'
+import { useUpdateTask } from './hooks/use-update-task'
 
 type Tarefa = {
   id: number
@@ -29,6 +31,11 @@ function Loading({ children }: { children: React.ReactNode }) {
 
 function Tarefas() {
   const { data: tarefas, error } = useSWRImmutable<Tarefa[]>('/tasks')
+  const { trigger: completarTarefa, isMutating: isCompletandoTarefa } =
+    useUpdateTask()
+
+  const { trigger: excluirTarefa, isMutating: isExcluindoTarefa } =
+    useDeleteTask()
 
   return (
     <>
@@ -36,11 +43,21 @@ function Tarefas() {
       <ul>
         {tarefas?.map((tarefa) => (
           <li key={tarefa.id}>
-            {tarefa.texto}{' '}
-            <Button size="xs" variant="outline">
+            {tarefa.texto} {tarefa.completa && <span>✅</span>}
+            <Button
+              size="xs"
+              variant="outline"
+              onClick={() => completarTarefa({ ...tarefa, completa: true })}
+              loading={isCompletandoTarefa}
+            >
               Completar
             </Button>{' '}
-            <Button size="xs" color="red">
+            <Button
+              size="xs"
+              color="red"
+              onClick={() => excluirTarefa({ id: tarefa.id })}
+              loading={isExcluindoTarefa}
+            >
               Excluir
             </Button>
           </li>
