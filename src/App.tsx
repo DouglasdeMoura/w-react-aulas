@@ -29,7 +29,7 @@ function Loading({ children }: { children: React.ReactNode }) {
 
 function Tarefas() {
   const { data: tarefas, error} = useSWRImmutable<Tarefa[]>('/tasks')
-
+  
   return (
     <>
       {error && <p>Erro ao carregar tarefas</p>}
@@ -68,7 +68,7 @@ function AdicionarTarefa() {
       })
     })}>
       <Stack>
-        <Textarea placeholder="Insira a nova tarefa" {...form.getInputProps('texto')} />
+        <Textarea label="Insira a nova tarefa" {...form.getInputProps('texto')} />
         <Button type="submit" loading={isMutating}>Adicionar</Button>
       </Stack>
     </form>
