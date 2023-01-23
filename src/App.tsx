@@ -28,14 +28,22 @@ function Loading({ children }: { children: React.ReactNode }) {
 }
 
 function Tarefas() {
-  const { data: tarefas, error} = useSWRImmutable<Tarefa[]>('/tasks')
-  
+  const { data: tarefas, error } = useSWRImmutable<Tarefa[]>('/tasks')
+
   return (
     <>
       {error && <p>Erro ao carregar tarefas</p>}
       <ul>
         {tarefas?.map((tarefa) => (
-          <li key={tarefa.id}>{tarefa.texto}</li>
+          <li key={tarefa.id}>
+            {tarefa.texto}{' '}
+            <Button size="xs" variant="outline">
+              Completar
+            </Button>{' '}
+            <Button size="xs" color="red">
+              Excluir
+            </Button>
+          </li>
         ))}
       </ul>
     </>
@@ -47,12 +55,15 @@ const schema = z.object({
 })
 
 function AdicionarTarefa() {
-  const { trigger, isMutating } = useSWRMutation('/tasks', async (url, { arg }) => {
-    await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(arg),
-    })
-  })
+  const { trigger, isMutating } = useSWRMutation(
+    '/tasks',
+    async (url, { arg }) => {
+      await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(arg),
+      })
+    }
+  )
 
   const form = useForm({
     initialValues: {
@@ -62,14 +73,21 @@ function AdicionarTarefa() {
   })
 
   return (
-    <form onSubmit={form.onSubmit((data) => {
-      trigger(data).then(() => {
-        form.reset()
-      })
-    })}>
+    <form
+      onSubmit={form.onSubmit((data) => {
+        trigger(data).then(() => {
+          form.reset()
+        })
+      })}
+    >
       <Stack>
-        <Textarea label="Insira a nova tarefa" {...form.getInputProps('texto')} />
-        <Button type="submit" loading={isMutating}>Adicionar</Button>
+        <Textarea
+          label="Insira a nova tarefa"
+          {...form.getInputProps('texto')}
+        />
+        <Button type="submit" loading={isMutating}>
+          Adicionar
+        </Button>
       </Stack>
     </form>
   )

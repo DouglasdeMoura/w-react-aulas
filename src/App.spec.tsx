@@ -1,4 +1,9 @@
-import { render, screen, waitFor, waitForElementToBeRemoved } from './utils/test-utils'
+import {
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from './utils/test-utils'
 import App from './App'
 
 describe('<App />', () => {
@@ -7,17 +12,18 @@ describe('<App />', () => {
 
     expect(screen.getByRole('heading', { name: 'Tarefas' })).toBeInTheDocument()
     expect(screen.getByLabelText('Insira a nova tarefa')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Adicionar' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Adicionar' })
+    ).toBeInTheDocument()
 
-    await waitForElementToBeRemoved(() => screen.getByText('Carregando tarefas'))
-
-
+    await waitForElementToBeRemoved(() =>
+      screen.getByText('Carregando tarefas')
+    )
 
     await waitFor(() => {
       expect(screen.getByText('Comprar pão')).toBeInTheDocument()
     })
-    
-  
+
     expect(screen.getByText('Pagar a conta de luz')).toBeInTheDocument()
     expect(screen.getByText('Pintar o portão')).toBeInTheDocument()
   })
@@ -27,7 +33,6 @@ describe('<App />', () => {
 
     const input = screen.getByLabelText('Insira a nova tarefa')
     const button = screen.getByRole('button', { name: 'Adicionar' })
-
 
     user.type(input, 'Estudar React')
     user.click(button)
