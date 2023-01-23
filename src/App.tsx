@@ -1,6 +1,6 @@
 import { Button, Stack, Textarea, Title } from '@mantine/core'
 import { Suspense } from 'react'
-import useSWR from 'swr'
+import useSWRImmutable from 'swr/immutable'
 import useSWRMutation from 'swr/mutation'
 import { z } from 'zod'
 import { useForm, zodResolver } from '@mantine/form'
@@ -28,7 +28,7 @@ function Loading({ children }: { children: React.ReactNode }) {
 }
 
 function Tarefas() {
-  const { data: tarefas, error} = useSWR<Tarefa[]>('/tasks')
+  const { data: tarefas, error} = useSWRImmutable<Tarefa[]>('/tasks')
 
   return (
     <>
