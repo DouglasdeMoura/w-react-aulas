@@ -49,6 +49,7 @@ function Tarefas() {
               variant="outline"
               onClick={() => completarTarefa({ ...tarefa, completa: true })}
               loading={isCompletandoTarefa}
+              data-testid={`completar-tarefa-${tarefa.id}`}
             >
               Completar
             </Button>{' '}
@@ -57,6 +58,7 @@ function Tarefas() {
               color="red"
               onClick={() => excluirTarefa({ id: tarefa.id })}
               loading={isExcluindoTarefa}
+              data-testid={`excluir-tarefa-${tarefa.id}`}
             >
               Excluir
             </Button>

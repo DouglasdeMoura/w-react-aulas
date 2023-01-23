@@ -41,4 +41,24 @@ describe('<App />', () => {
       expect(screen.getByText('Estudar React')).toBeInTheDocument()
     })
   })
+
+  it.skip('deve excluir uma tarefa', async () => {
+    const { user } = render(<App />)
+
+    const button = screen.getByTestId('excluir-tarefa-1')
+
+    await user.click(button)
+
+    expect(screen.queryByText('Pagar a conta de luz')).not.toBeInTheDocument()
+  })
+
+  it.skip('deve completar uma tarefa', async () => {
+    const { user } = render(<App />)
+
+    const button = screen.getByTestId('completar-tarefa-2')
+
+    await user.click(button)
+
+    expect(screen.getByText('Pagar a conta de luz ✅')).toBeInTheDocument()
+  })
 })
