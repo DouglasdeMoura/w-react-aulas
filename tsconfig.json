@@ -24,7 +24,8 @@
     ]
   },
   "include": [
-    "src"
+    "src",
+    "./.vitest/vitest-setup.ts"
   ],
   "references": [
     {
