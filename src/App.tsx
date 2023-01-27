@@ -40,31 +40,33 @@ function Tarefas() {
   return (
     <>
       {error && <p>Erro ao carregar tarefas</p>}
-      <ul>
-        {tarefas?.map((tarefa) => (
-          <li key={tarefa.id}>
-            {tarefa.texto} {tarefa.completa && <span>✅</span>}
-            <Button
-              size="xs"
-              variant="outline"
-              onClick={() => completarTarefa({ ...tarefa, completa: true })}
-              loading={isCompletandoTarefa}
-              data-testid={`completar-tarefa-${tarefa.id}`}
-            >
-              Completar
-            </Button>{' '}
-            <Button
-              size="xs"
-              color="red"
-              onClick={() => excluirTarefa({ id: tarefa.id })}
-              loading={isExcluindoTarefa}
-              data-testid={`excluir-tarefa-${tarefa.id}`}
-            >
-              Excluir
-            </Button>
-          </li>
-        ))}
-      </ul>
+      {tarefas ? (
+        <ul>
+          {tarefas.map((tarefa) => (
+            <li key={tarefa.id}>
+              {tarefa.texto} {tarefa.completa && <span>✅</span>}
+              <Button
+                size="xs"
+                variant="outline"
+                onClick={() => completarTarefa({ ...tarefa, completa: true })}
+                loading={isCompletandoTarefa}
+                data-testid={`completar-tarefa-${tarefa.id}`}
+              >
+                Completar
+              </Button>{' '}
+              <Button
+                size="xs"
+                color="red"
+                onClick={() => excluirTarefa({ id: tarefa.id })}
+                loading={isExcluindoTarefa}
+                data-testid={`excluir-tarefa-${tarefa.id}`}
+              >
+                Excluir
+              </Button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </>
   )
 }
