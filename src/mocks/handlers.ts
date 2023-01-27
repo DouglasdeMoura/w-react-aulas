@@ -20,7 +20,7 @@ const tasks = [
 
 export const handlers = [
   rest.get('*/tasks', (_req, res, ctx) =>
-    res(ctx.status(200), ctx.json(tasks)),
+    res(ctx.delay(), ctx.status(200), ctx.json(tasks)),
   ),
   rest.post('*/tasks', async (req, res, ctx) => {
     const body = await req.json()
@@ -33,7 +33,7 @@ export const handlers = [
 
     tasks.push(novaTarefa)
 
-    return res(ctx.status(201), ctx.json(novaTarefa))
+    return res(ctx.delay(), ctx.status(201), ctx.json(novaTarefa))
   }),
   rest.delete('*/tasks/:id', (req, res, ctx) => {
     const id = Number(req.params.id)
@@ -42,7 +42,7 @@ export const handlers = [
 
     tasks.splice(index, 1)
 
-    return res(ctx.status(204))
+    return res(ctx.delay(), ctx.status(204))
   }),
   rest.post('*/tasks/:id', async (req, res, ctx) => {
     const id = Number(req.params.id)
@@ -61,6 +61,6 @@ export const handlers = [
 
     tasks[index] = taskAtualizada
 
-    return res(ctx.status(200), ctx.json(taskAtualizada))
+    return res(ctx.delay(), ctx.status(200), ctx.json(taskAtualizada))
   }),
 ]
