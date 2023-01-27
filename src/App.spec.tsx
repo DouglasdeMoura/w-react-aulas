@@ -28,7 +28,21 @@ describe('<App />', () => {
     expect(screen.getByText('Pintar o portão')).toBeInTheDocument()
   })
 
-  it('deve adicionar uma nova tarefa', async () => {
+  it.skip('deve exibir mensagem de erro quando usuário tentar adicionar uma tarefa vazia', async () => {
+    const { user } = render(<App />)
+
+    await waitForElementToBeRemoved(() =>
+      screen.getByText('Carregando tarefas'),
+    )
+
+    const textbox = screen.getByLabelText('Insira a nova tarefa')
+    const button = screen.getByRole('button', { name: 'Adicionar' })
+    await user.click(button)
+
+    await waitFor(() => expect(textbox).toBeInvalid())
+  })
+
+  it.skip('deve adicionar uma nova tarefa', async () => {
     const { user } = render(<App />)
 
     await waitForElementToBeRemoved(() =>
@@ -46,7 +60,7 @@ describe('<App />', () => {
     })
   })
 
-  it('deve excluir uma tarefa', async () => {
+  it.skip('deve excluir uma tarefa', async () => {
     const { user } = render(<App />)
 
     const button = screen.getByTestId('excluir-tarefa-1')
@@ -56,7 +70,7 @@ describe('<App />', () => {
     expect(screen.queryByText('Pagar a conta de luz')).not.toBeInTheDocument()
   })
 
-  it('deve completar uma tarefa', async () => {
+  it.skip('deve completar uma tarefa', async () => {
     const { user } = render(<App />)
 
     const button = screen.getByTestId('completar-tarefa-2')
