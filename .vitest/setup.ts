@@ -3,7 +3,7 @@ import { afterAll, afterEach, beforeAll, expect } from 'vitest'
 
 import { server } from '../src/mocks/server'
 
-beforeAll(() => server.listen())
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 
 afterEach(() => server.resetHandlers())
 
