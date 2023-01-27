@@ -8,15 +8,18 @@ export const render = (ui: React.ReactElement, options?: RenderOptions) => {
   const wrapper = ({ children }: { children: React.ReactNode }) => (
     <SWRConfig
       value={{
-        // suspense: true,
-        fetcher: (url: string, init?: RequestInit) =>
-          fetch(`http://douglasmoura.dev${url}`, init).then((res) => {
-            if (!res.ok) {
-              throw new Error(res.statusText)
-            }
+        suspense: true,
+        fetcher: (url: string, init?: RequestInit) => {
+          return fetch(`https://example.com${url}`, init)
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error(res.statusText)
+              }
 
-            return res.json()
-          }),
+              return res.json()
+            })
+            .catch(console.error)
+        },
       }}
     >
       {children}
