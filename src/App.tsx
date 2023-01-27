@@ -31,11 +31,6 @@ function Loading({ children }: { children: React.ReactNode }) {
 
 function Tarefas() {
   const { data: tarefas, error } = useSWRImmutable<Tarefa[]>('/tasks')
-  const { trigger: completarTarefa, isMutating: isCompletandoTarefa } =
-    useUpdateTask()
-
-  const { trigger: excluirTarefa, isMutating: isExcluindoTarefa } =
-    useDeleteTask()
 
   return (
     <>
@@ -43,31 +38,45 @@ function Tarefas() {
       {tarefas ? (
         <ul>
           {tarefas.map((tarefa) => (
-            <li key={tarefa.id}>
-              {tarefa.texto} {tarefa.completa && <span>✅</span>}
-              <Button
-                size="xs"
-                variant="outline"
-                onClick={() => completarTarefa({ ...tarefa, completa: true })}
-                loading={isCompletandoTarefa}
-                data-testid={`completar-tarefa-${tarefa.id}`}
-              >
-                Completar
-              </Button>{' '}
-              <Button
-                size="xs"
-                color="red"
-                onClick={() => excluirTarefa({ id: tarefa.id })}
-                loading={isExcluindoTarefa}
-                data-testid={`excluir-tarefa-${tarefa.id}`}
-              >
-                Excluir
-              </Button>
-            </li>
+            <TarefaAcoes key={tarefa.id} {...tarefa} />
           ))}
         </ul>
       ) : null}
     </>
+  )
+}
+
+type TarefaAcoesProps = Tarefa
+
+function TarefaAcoes(props: TarefaAcoesProps) {
+  const { trigger: completarTarefa, isMutating: isCompletandoTarefa } =
+    useUpdateTask()
+
+  const { trigger: excluirTarefa, isMutating: isExcluindoTarefa } =
+    useDeleteTask()
+
+  return (
+    <li key={props.id}>
+      {props.texto} {props.completa && <span>✅</span>}
+      <Button
+        size="xs"
+        variant="outline"
+        onClick={() => completarTarefa({ ...props, completa: true })}
+        loading={isCompletandoTarefa}
+        data-testid={`completar-tarefa-${props.id}`}
+      >
+        Completar
+      </Button>{' '}
+      <Button
+        size="xs"
+        color="red"
+        onClick={() => excluirTarefa({ id: props.id })}
+        loading={isExcluindoTarefa}
+        data-testid={`excluir-tarefa-${props.id}`}
+      >
+        Excluir
+      </Button>
+    </li>
   )
 }
 
