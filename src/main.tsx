@@ -16,13 +16,15 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         value={{
           suspense: true,
           fetcher: (url: string, init?: RequestInit) =>
-            fetch(url, init).then((res) => {
-              if (!res.ok) {
-                throw new Error(res.statusText)
-              }
+            fetch(url, init)
+              .then((res) => {
+                if (!res.ok) {
+                  throw new Error(res.statusText)
+                }
 
-              return res.json()
-            }),
+                return res.json()
+              })
+              .catch(console.error),
         }}
       >
         <Container>
