@@ -1,9 +1,5 @@
 import useSWRMutation from 'swr/mutation'
+import { api } from '../utils/fetcher'
 
 export const useUpdateTask = () =>
-  useSWRMutation('/tasks', async (url, { arg }) => {
-    await fetch(`${url}/${arg?.id}`, {
-      method: 'POST',
-      body: JSON.stringify(arg),
-    })
-  })
+  useSWRMutation('/tasks', (url, { arg }) => api.post(`${url}/${arg?.id}`, arg))

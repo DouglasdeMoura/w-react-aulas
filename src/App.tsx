@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { useForm, zodResolver } from '@mantine/form'
 import { useDeleteTask } from './hooks/use-delete-task'
 import { useUpdateTask } from './hooks/use-update-task'
+import { api } from './utils/fetcher'
 
 type Tarefa = {
   id: number
@@ -85,14 +86,8 @@ const schema = z.object({
 })
 
 function AdicionarTarefa() {
-  const { trigger, isMutating } = useSWRMutation(
-    '/tasks',
-    async (url, { arg }) => {
-      await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(arg),
-      })
-    },
+  const { trigger, isMutating } = useSWRMutation('/tasks', (url, { arg }) =>
+    api.post(url, arg),
   )
 
   const form = useForm({

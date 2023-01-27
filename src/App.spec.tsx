@@ -7,7 +7,7 @@ import {
 import App from './App'
 
 describe('<App />', () => {
-  it.skip('deve renderizar os componentes com o formulário de adição de tarefas e a lista de tarefas atual', async () => {
+  it('deve renderizar os componentes com o formulário de adição de tarefas e a lista de tarefas atual', async () => {
     render(<App />)
 
     expect(screen.getByRole('heading', { name: 'Tarefas' })).toBeInTheDocument()
@@ -28,21 +28,25 @@ describe('<App />', () => {
     expect(screen.getByText('Pintar o portão')).toBeInTheDocument()
   })
 
-  it.skip('deve adicionar uma nova tarefa', async () => {
+  it('deve adicionar uma nova tarefa', async () => {
     const { user } = render(<App />)
 
-    const input = screen.getByLabelText('Insira a nova tarefa')
+    await waitForElementToBeRemoved(() =>
+      screen.getByText('Carregando tarefas'),
+    )
+
+    const textbox = screen.getByLabelText('Insira a nova tarefa')
     const button = screen.getByRole('button', { name: 'Adicionar' })
 
-    user.type(input, 'Estudar React')
-    user.click(button)
+    user.type(textbox, 'Estudar React')
+    await user.click(button)
 
     await waitFor(() => {
       expect(screen.getByText('Estudar React')).toBeInTheDocument()
     })
   })
 
-  it.skip('deve excluir uma tarefa', async () => {
+  it('deve excluir uma tarefa', async () => {
     const { user } = render(<App />)
 
     const button = screen.getByTestId('excluir-tarefa-1')
@@ -52,7 +56,7 @@ describe('<App />', () => {
     expect(screen.queryByText('Pagar a conta de luz')).not.toBeInTheDocument()
   })
 
-  it.skip('deve completar uma tarefa', async () => {
+  it('deve completar uma tarefa', async () => {
     const { user } = render(<App />)
 
     const button = screen.getByTestId('completar-tarefa-2')
