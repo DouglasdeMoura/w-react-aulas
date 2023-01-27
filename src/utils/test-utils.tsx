@@ -10,7 +10,8 @@ export const render = (ui: React.ReactElement, options?: RenderOptions) => {
       value={{
         suspense: true,
         fetcher: (url: string, init?: RequestInit) => {
-          return fetch(`https://example.com${url}`, init)
+          const path = `https://example.com${url}`
+          return fetch(path, init)
             .then((res) => {
               if (!res.ok) {
                 throw new Error(res.statusText)
