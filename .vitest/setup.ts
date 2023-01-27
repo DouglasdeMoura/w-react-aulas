@@ -1,4 +1,3 @@
-import 'vitest-dom/extend-expect'
 import * as matchers from 'vitest-dom/matchers'
 import { afterAll, afterEach, beforeAll, expect } from 'vitest'
 
