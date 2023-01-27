@@ -13,11 +13,11 @@ describe('<App />', () => {
     expect(screen.getByRole('heading', { name: 'Tarefas' })).toBeInTheDocument()
     expect(screen.getByLabelText('Insira a nova tarefa')).toBeInTheDocument()
     expect(
-      screen.getByRole('button', { name: 'Adicionar' })
+      screen.getByRole('button', { name: 'Adicionar' }),
     ).toBeInTheDocument()
 
     await waitForElementToBeRemoved(() =>
-      screen.getByText('Carregando tarefas')
+      screen.getByText('Carregando tarefas'),
     )
 
     await waitFor(() => {

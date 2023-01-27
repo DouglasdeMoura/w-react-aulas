@@ -20,7 +20,7 @@ const tasks = [
 
 export const handlers = [
   rest.get('*/tasks', (_req, res, ctx) =>
-    res(ctx.status(200), ctx.json(tasks))
+    res(ctx.status(200), ctx.json(tasks)),
   ),
   rest.post('*/tasks', async (req, res, ctx) => {
     const body = await req.json()

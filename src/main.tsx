@@ -30,5 +30,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </Container>
       </SWRConfig>
     </MantineProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 )

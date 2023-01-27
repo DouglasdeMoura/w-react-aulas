@@ -81,7 +81,7 @@ function AdicionarTarefa() {
         method: 'POST',
         body: JSON.stringify(arg),
       })
-    }
+    },
   )
 
   const form = useForm({
